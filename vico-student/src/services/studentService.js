@@ -1,9 +1,12 @@
 import { getMockStudent } from './authService';
+import { getFoundationForGrade } from './curriculumService';
 
 export function getStudentProfile() {
+  const student = getMockStudent();
+  const foundation = getFoundationForGrade(student.grade);
   return {
-    ...getMockStudent(),
-    foundation: 'Foundation 1',
+    ...student,
+    foundation: foundation?.name || 'Not assigned',
     badge: 'Grade 1 Explorer',
     learningStats: {
       lessonsCompleted: 4,
@@ -15,13 +18,14 @@ export function getStudentProfile() {
 }
 
 export function getStudentOverview() {
+  const student = getMockStudent();
+  const foundation = getFoundationForGrade(student.grade);
   return {
-    name: 'Aarav Sharma',
-    grade: 1,
-    foundationLabel: 'Foundation 1',
-    currentChapter: 'Chapter 1: The Super Machine: Computer',
-    currentTopic: 'What is a Machine?',
+    name: student.name,
+    grade: student.grade,
+    foundationLabel: foundation?.name || 'Not assigned',
+    currentChapter: foundation?.chapters?.[0]?.title || 'No chapter available',
+    currentTopic: foundation?.chapters?.[0]?.lessons?.[0]?.title || 'No topic available',
     dailyGoal: 30,
-    goalComplete: 18,
   };
 }

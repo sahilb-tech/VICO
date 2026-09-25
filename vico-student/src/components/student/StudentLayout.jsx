@@ -19,7 +19,13 @@ export default function StudentLayout() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const title = pageTitles[location.pathname] || 'Student Dashboard';
+  const title = pageTitles[location.pathname]
+    || (location.pathname.includes('/lesson/') ? 'Lesson' : null)
+    || (location.pathname.includes('/activity/') ? 'Interactive Activity' : null)
+    || (location.pathname.includes('/practice/') ? 'Practice' : null)
+    || (location.pathname.includes('/quiz/') ? 'Quiz' : null)
+    || (location.pathname.includes('/result/') ? 'Quiz Result' : null)
+    || 'Student Dashboard';
 
   return (
     <div className="student-app-shell">

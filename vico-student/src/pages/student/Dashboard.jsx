@@ -5,23 +5,28 @@ import ContinueLearning from '../../components/student/ContinueLearning';
 import ProgressCard from '../../components/student/ProgressCard';
 import AchievementCard from '../../components/student/AchievementCard';
 import NotificationCard from '../../components/student/NotificationCard';
+import StateMessage from '../../components/common/StateMessage';
 import { getStudentOverview } from '../../services/studentService';
-import { getProgressOverview, getAchievements, getRecentActivity } from '../../services/progressService';
+import { getProgressOverview, getAchievements } from '../../services/progressService';
 import { getNotifications } from '../../services/notificationService';
 import { getCurriculumByGrade } from '../../services/curriculumService';
 
 export default function Dashboard() {
   const student = getStudentOverview();
-  const progress = getProgressOverview();
+  const progress = getProgressOverview(student.grade);
   const achievements = getAchievements();
   const notifications = getNotifications();
   const foundation = getCurriculumByGrade(student.grade);
 
-  const lesson = foundation?.chapters?.[0]?.lessons?.[1] || {
-    id: 'lesson-computer-smart-machine',
-    title: 'Computer — A Smart Machine',
-    chapter: 'Chapter 1: The Super Machine: Computer',
-  };
+  const lesson = foundation?.chapters?.[0]?.lessons?.find((item) => item.status !== 'Locked');
+
+  if (!foundation || !foundation.chapters.length || !progress) {
+    return (
+      <div className="page-stack">
+        <StateMessage type="empty" title="Your foundation is not available yet" message={`There is no curriculum assigned for Grade ${student.grade}.`} />
+      </div>
+    );
+  }
 
   return (
     <div className="page-stack">
@@ -33,7 +38,7 @@ export default function Dashboard() {
         </div>
         <div className="hero-panel-stats">
           <div>
-            <strong>{student.goalComplete} min</strong>
+            <strong>{progress.todayMinutes} min</strong>
             <span>Today</span>
           </div>
           <div>
@@ -54,7 +59,7 @@ export default function Dashboard() {
           <p className="metric-value">Chapter 1</p>
         </Card>
         <Card title="Daily goal" subtitle="Learning target">
-          <p className="metric-value">{student.goalComplete}/{student.dailyGoal} min</p>
+          <p className="metric-value">{progress.todayMinutes}/{student.dailyGoal} min</p>
         </Card>
       </div>
 
@@ -71,12 +76,12 @@ export default function Dashboard() {
 
           <Card title="Recent activity" subtitle="Latest learning updates">
             <ul className="list-clean">
-              {getRecentActivity().map((item) => (
+              {progress.recentActivity.length ? progress.recentActivity.map((item) => (
                 <li key={`${item.title}-${item.time}`} className="list-row">
                   <span>{item.title}</span>
                   <small>{item.type}</small>
                 </li>
-              ))}
+              )) : <li><StateMessage title="No activity yet" message="Complete the first activity to see your learning history." /></li>}
             </ul>
           </Card>
         </div>

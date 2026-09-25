@@ -1,10 +1,15 @@
 import { Link, useParams } from 'react-router-dom';
 import Card from '../../components/common/Card';
+import StateMessage from '../../components/common/StateMessage';
 import { getLessonContent } from '../../services/curriculumService';
 
 export default function LessonDetail() {
   const { lessonId } = useParams();
   const lesson = getLessonContent(lessonId);
+
+  if (!lesson) {
+    return <StateMessage type="error" title="Lesson not found" message="This lesson is not available in your assigned curriculum." />;
+  }
 
   return (
     <div className="page-stack">

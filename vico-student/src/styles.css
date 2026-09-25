@@ -1,4 +1,21 @@
 :root {
+  --color-primary: #5d36a8;
+  --color-primary-dark: #43227d;
+  --color-primary-soft: #f2ebff;
+  --color-background: #f4f1fb;
+  --color-surface: #ffffff;
+  --color-text: #1f2937;
+  --color-text-muted: #64748b;
+  --color-success: #2f9c73;
+  --color-warning: #c98520;
+  --color-error: #b3261e;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
   --violet-900: #2f185d;
   --violet-800: #43227d;
   --violet-700: #5d36a8;
@@ -7,6 +24,7 @@
   --indigo-50: #f7f5ff;
   --slate-900: #1f2937;
   --slate-700: #475569;
+  --slate-600: #5d6b7e;
   --slate-500: #64748b;
   --slate-300: #d5dbe5;
   --slate-200: #ebeff6;
@@ -32,13 +50,20 @@ body {
   margin: 0;
   font-family: Inter, 'Segoe UI', sans-serif;
   background: #f4f1fb;
-  color: var(--slate-900);
+  color: var(--color-text);
 }
 
 a { text-decoration: none; }
 
 button, input {
   font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(132, 88, 207, 0.45);
+  outline-offset: 3px;
 }
 
 #root {
@@ -631,8 +656,80 @@ button, input {
   color: var(--violet-800);
 }
 
+.vico-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .full-width {
   width: 100%;
+}
+
+.state-message {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+}
+
+.state-message h3,
+.state-message p {
+  margin: 0;
+}
+
+.state-message p {
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.state-icon {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.state-error {
+  border-color: rgba(179, 38, 30, 0.2);
+}
+
+.state-error .state-icon {
+  background: #fdecea;
+  color: var(--color-error);
+}
+
+.loader-wrap {
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+}
+
+.loader {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--slate-200);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: vico-spin 700ms linear infinite;
+}
+
+@keyframes vico-spin {
+  to { transform: rotate(360deg); }
+}
+
+.list-row-detail {
+  display: block;
+  margin-top: 3px;
+  color: var(--color-text-muted);
 }
 
 .lesson-detail-wrap {
@@ -702,6 +799,18 @@ button, input {
   color: var(--green-500);
   font-weight: 700;
   margin: 0;
+}
+
+.error-message {
+  color: var(--color-error);
+  font-weight: 700;
+  margin: 0;
+}
+
+.choice-button.incorrect {
+  border-color: var(--color-error);
+  background: #fdecea;
+  color: var(--color-error);
 }
 
 .helper-text {

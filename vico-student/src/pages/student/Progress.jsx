@@ -1,9 +1,14 @@
 import Card from '../../components/common/Card';
+import StateMessage from '../../components/common/StateMessage';
 import ProgressCard from '../../components/student/ProgressCard';
 import { getProgressOverview } from '../../services/progressService';
 
 export default function Progress() {
   const progress = getProgressOverview();
+
+  if (!progress) {
+    return <StateMessage type="empty" title="Progress is not available" message="A foundation must be assigned before progress can be calculated." />;
+  }
 
   return (
     <div className="page-stack">
@@ -22,12 +27,15 @@ export default function Progress() {
         </div>
       </Card>
 
-      <Card title="Recently completed" subtitle="Your latest learnings">
+      <Card title="Topic and lesson progress" subtitle="Calculated from your completed activities and quizzes">
         <ul className="list-clean">
           {progress.lessons.map((lesson) => (
             <li key={lesson.title} className="list-row">
-              <span>{lesson.title}</span>
-              <small>{lesson.status}</small>
+              <span>
+                {lesson.title}
+                <small className="list-row-detail">{lesson.progress}% complete</small>
+              </span>
+              <span className="status-pill">{lesson.status}</span>
             </li>
           ))}
         </ul>

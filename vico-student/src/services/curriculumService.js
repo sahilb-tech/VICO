@@ -20,13 +20,19 @@ export const foundationCatalog = [
         lessons: [
           {
             id: 'lesson-what-is-machine',
+            chapterId: 'chapter-1',
+            foundationId: 'foundation-1',
+            topicId: 'topic-what-is-machine',
             title: 'What is a Machine?',
-            status: 'Completed',
+            status: 'Available',
             duration: '8 min',
             type: 'Story',
           },
           {
             id: 'lesson-computer-smart-machine',
+            chapterId: 'chapter-1',
+            foundationId: 'foundation-1',
+            topicId: 'topic-computer-smart-machine',
             title: 'Computer — A Smart Machine',
             status: 'In Progress',
             duration: '9 min',
@@ -34,6 +40,9 @@ export const foundationCatalog = [
           },
           {
             id: 'lesson-types-of-machines',
+            chapterId: 'chapter-1',
+            foundationId: 'foundation-1',
+            topicId: 'topic-types-of-machines',
             title: 'Types of Machines',
             status: 'Available',
             duration: '7 min',
@@ -41,6 +50,9 @@ export const foundationCatalog = [
           },
           {
             id: 'lesson-desktop-computer',
+            chapterId: 'chapter-1',
+            foundationId: 'foundation-1',
+            topicId: 'topic-desktop-computer',
             title: 'Desktop Computer',
             status: 'Locked',
             duration: '10 min',
@@ -50,11 +62,18 @@ export const foundationCatalog = [
       },
     ],
   },
+  ...[2, 3, 4, 5].map((grade) => ({
+    id: `foundation-${grade}`,
+    name: `Foundation ${grade}`,
+    grade,
+    description: `Grade ${grade} learning foundation. Approved curriculum content will appear here when available.`,
+    chapters: [],
+  })),
 ];
 
 export function getFoundationForGrade(grade) {
-  const foundationId = gradeFoundationMap[grade] || 'foundation-1';
-  return foundationCatalog.find((item) => item.id === foundationId) || foundationCatalog[0];
+  const foundationId = gradeFoundationMap[grade];
+  return foundationCatalog.find((item) => item.id === foundationId) || null;
 }
 
 export function getCurriculumByGrade(grade) {
@@ -65,6 +84,9 @@ export function getLessonContent(lessonId) {
   const lessonMap = {
     'lesson-what-is-machine': {
       id: 'lesson-what-is-machine',
+      foundationId: 'foundation-1',
+      chapterId: 'chapter-1',
+      topicId: 'topic-what-is-machine',
       title: 'What is a Machine?',
       foundation: 'Foundation 1',
       chapter: 'Chapter 1: The Super Machine: Computer',
@@ -97,11 +119,12 @@ export function getLessonContent(lessonId) {
           },
         ],
       },
-      progress: 100,
-      status: 'Completed',
     },
     'lesson-computer-smart-machine': {
       id: 'lesson-computer-smart-machine',
+      foundationId: 'foundation-1',
+      chapterId: 'chapter-1',
+      topicId: 'topic-computer-smart-machine',
       title: 'Computer — A Smart Machine',
       foundation: 'Foundation 1',
       chapter: 'Chapter 1: The Super Machine: Computer',
@@ -134,10 +157,8 @@ export function getLessonContent(lessonId) {
           },
         ],
       },
-      progress: 60,
-      status: 'In Progress',
     },
   };
 
-  return lessonMap[lessonId] || lessonMap['lesson-what-is-machine'];
+  return lessonMap[lessonId] || null;
 }
