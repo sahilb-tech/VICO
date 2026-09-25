@@ -9,10 +9,13 @@ export default function ActivityPage() {
   const { activityId } = useParams();
   const lesson = getLessonContent(activityId);
   const [selected, setSelected] = useState('');
+  const [checked, setChecked] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const [feedback, setFeedback] = useState('');
 
   const handleCheck = () => {
+    if (!selected) return;
+    setChecked(true);
+
     if (selected === lesson.interactiveActivity.correctAnswer) {
       recordActivityCompletion({ lessonId: lesson.id, activityId });
       setCompleted(true);
@@ -33,10 +36,11 @@ export default function ActivityPage() {
               <button
                 key={choice}
                 type="button"
-                className={`choice-button ${selected === choice ? 'selected' : ''} ${selected === choice && feedback.startsWith('Wrong') ? 'incorrect' : ''}`}
+                className={`choice-button ${selected === choice ? 'selected' : ''} ${checked && selected === choice && selected !== lesson.interactiveActivity.correctAnswer ? 'incorrect' : ''}`}
                 onClick={() => {
                   setSelected(choice);
-                  setFeedback(choice === lesson.interactiveActivity.correctAnswer ? 'Correct answer. Click Check answer to continue.' : 'Wrong answer. Try again.');
+                  setChecked(false);
+                  setCompleted(false);
                 }}
               >
                 {choice}
@@ -46,10 +50,10 @@ export default function ActivityPage() {
 
           {completed ? (
             <p className="success-message">Great job! You completed the activity.</p>
-          ) : feedback.startsWith('Wrong') ? (
-            <p className="error-message" role="alert">{feedback}</p>
-          ) : feedback ? (
-            <p className="success-message" role="status">{feedback}</p>
+          ) : checked && selected !== lesson.interactiveActivity.correctAnswer ? (
+            <p className="error-message" role="alert">Wrong answer. Try again.</p>
+          ) : checked ? (
+            <p className="success-message" role="status">Correct answer. Click Next to continue.</p>
           ) : (
             <p className="helper-text">Select the correct answer to continue.</p>
           )}
@@ -57,9 +61,13 @@ export default function ActivityPage() {
       </Card>
 
       <div className="action-row">
-        <button type="button" className="vico-btn vico-btn-primary" onClick={handleCheck}>Check answer</button>
+        {!completed && (
+          <button type="button" className="vico-btn vico-btn-primary" onClick={handleCheck} disabled={!selected}>
+            Check answer
+          </button>
+        )}
         {completed && (
-          <Link to={`/student/practice/${lesson.id}`} className="vico-btn vico-btn-secondary">Continue to practice</Link>
+          <Link to={`/student/practice/${lesson.id}`} className="vico-btn vico-btn-primary">Next</Link>
         )}
       </div>
     </div>

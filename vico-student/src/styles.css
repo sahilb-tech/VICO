@@ -833,6 +833,12 @@ input:focus-visible {
   padding: 20px;
 }
 
+.retry-note {
+  color: var(--color-warning) !important;
+  font-weight: 700;
+  margin-top: 8px !important;
+}
+
 .score-ring {
   width: 90px;
   height: 90px;
